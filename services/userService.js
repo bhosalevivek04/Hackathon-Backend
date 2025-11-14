@@ -85,8 +85,14 @@ const loginUser = async (email, password) => {
 
 const getUserProfile = async (userId) => {
   return new Promise((resolve, reject) => {
+    // Convert userId to integer to ensure proper type matching
+    const userIdInt = parseInt(userId, 10)
+    if (isNaN(userIdInt)) {
+      reject(new Error('Invalid user ID'))
+      return
+    }
     const sql = `SELECT first_name, last_name, mobile, email FROM users WHERE id = ?`
-    pool.query(sql, [userId], (error, data) => {
+    pool.query(sql, [userIdInt], (error, data) => {
       if (error) {
         reject(new Error('Database error: ' + error.message))
         return

@@ -36,7 +36,11 @@ const login = async (req, res) => {
 
 const getProfile = async (req, res) => {
     try {
-        const userId = req.headers.userId
+        // Express lowercases headers, so check both userId and userid
+        const userId = req.headers.userid || req.headers.userId
+        if (!userId) {
+            return res.send(result.createErrorResult('User ID is required in headers'))
+        }
         const userData = await userService.getUserProfile(userId)
         res.send(result.createSuccessResult(userData))
     } catch (error) {
@@ -46,7 +50,12 @@ const getProfile = async (req, res) => {
 
 const updateProfile = async (req, res) => {
     try {
-        const userId = req.headers.userId
+        // Express lowercases headers, so check both userId and userid
+        
+        const userId = req.headers.userid || req.headers.userId
+        if (!userId) {
+            return res.send(result.createErrorResult('User ID is required in headers'))
+        }
         const { firstName, lastName, phone } = req.body
         const userData = await userService.updateUserProfile(userId, { firstName, lastName, phone })
         res.send(result.createSuccessResult(userData))
@@ -57,7 +66,11 @@ const updateProfile = async (req, res) => {
 
 const changePassword = async (req, res) => {
     try {
-        const userId = req.headers.userId
+        // Express lowercases headers, so check both userId and userid
+        const userId = req.headers.userid || req.headers.userId
+        if (!userId) {
+            return res.send(result.createErrorResult('User ID is required in headers'))
+        }
         const { currentPassword, newPassword } = req.body
 
         if (!currentPassword || !newPassword) {
