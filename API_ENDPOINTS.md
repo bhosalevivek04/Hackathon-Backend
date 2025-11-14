@@ -8,7 +8,7 @@ http://localhost:4000
 ```
 
 ## Authentication
-All authenticated endpoints require `userId` in the request headers:
+All authenticated endpoints require `userId` in the request headers (case-insensitive, accepts both `userId` and `userid`):
 ```
 userId: <user_id>
 ```
@@ -481,13 +481,15 @@ All endpoints return errors in the following format:
 
 1. **Rating System**: The API accepts ratings from 1-10, but the database stores them as 1-5. The conversion is handled automatically.
 
-2. **Authentication**: Currently uses `userId` header. In production, this should be replaced with JWT token authentication.
+2. **Authentication**: Currently uses `userId` header (case-insensitive, accepts both `userId` and `userid`). In production, this should be replaced with JWT token authentication.
 
-3. **Date Format**: 
+3. **Date Format**:
    - Date of birth: `MM/DD/YYYY` (e.g., `01/15/1990`)
    - Release dates: `YYYY-MM-DD` (e.g., `1994-09-23`)
 
 4. **Sharing**: When a review is deleted, all shares are automatically removed (CASCADE).
 
 5. **One Review Per Movie**: Each user can only create one review per movie.
+
+6. **Header Case Sensitivity**: All authenticated endpoints accept both `userId` and `userid` headers for flexibility.
 

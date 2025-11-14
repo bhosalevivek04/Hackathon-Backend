@@ -69,7 +69,10 @@ const getReviewById = async (req, res) => {
 
 const updateReview = async (req, res) => {
   try {
-    const userId = req.headers.userId
+    const userId = req.headers.userId || req.headers.userid
+    if (!userId) {
+      return res.send(result.createErrorResult('User ID is required in headers'))
+    }
     const { id } = req.params
     const { review, rating } = req.body
 
@@ -90,7 +93,10 @@ const updateReview = async (req, res) => {
 
 const deleteReview = async (req, res) => {
   try {
-    const userId = req.headers.userId
+    const userId = req.headers.userId || req.headers.userid
+    if (!userId) {
+      return res.send(result.createErrorResult('User ID is required in headers'))
+    }
     const { id } = req.params
     const reviewData = await reviewService.deleteReview(id, userId)
     res.send(result.createSuccessResult(reviewData))
@@ -101,7 +107,10 @@ const deleteReview = async (req, res) => {
 
 const shareReview = async (req, res) => {
   try {
-    const userId = req.headers.userId
+    const userId = req.headers.userId || req.headers.userid
+    if (!userId) {
+      return res.send(result.createErrorResult('User ID is required in headers'))
+    }
     const { id } = req.params
     const { userIds } = req.body
 
@@ -118,7 +127,10 @@ const shareReview = async (req, res) => {
 
 const getSharedReviews = async (req, res) => {
   try {
-    const userId = req.headers.userId
+    const userId = req.headers.userId || req.headers.userid
+    if (!userId) {
+      return res.send(result.createErrorResult('User ID is required in headers'))
+    }
     const reviews = await reviewService.getSharedReviews(userId)
     res.send(result.createSuccessResult(reviews))
   } catch (error) {
@@ -128,7 +140,10 @@ const getSharedReviews = async (req, res) => {
 
 const getAllUsersForSharing = async (req, res) => {
   try {
-    const userId = req.headers.userId
+    const userId = req.headers.userId || req.headers.userid
+    if (!userId) {
+      return res.send(result.createErrorResult('User ID is required in headers'))
+    }
     const users = await reviewService.getAllUsersForSharing(userId)
     res.send(result.createSuccessResult(users))
   } catch (error) {
