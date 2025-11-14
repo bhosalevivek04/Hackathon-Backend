@@ -116,11 +116,18 @@ const getUserProfile = async (userId) => {
 
 const updateUserProfile = async (userId, userData) => {
   return new Promise((resolve, reject) => {
-    const { firstName, lastName, phone } = userData
-    const sql = `UPDATE users SET first_name=?, last_name=?, mobile=? WHERE id = ?`
+    const { firstName, lastName, email, mobile, dob } = userData
+
+    let formattedDateOfBirth = dob
+    if (dob && dob.includes('/')) {
+      const [month, day, year] = dob.split('/')
+      formattedDateOfBirth = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+    }
+
+    const sql = `UPDATE users SET first_name=?, last_name=?, email=?, mobile=?, birth=? WHERE id = ?`
     pool.query(
       sql,
-      [firstName, lastName, phone, userId],
+      [firstName, lastName, email, mobile, formattedDateOfBirth, userId],
       (error, data) => {
         if (error) {
           reject(new Error('Update failed: ' + error.message))
@@ -134,7 +141,7 @@ const updateUserProfile = async (userId, userData) => {
   })
 }
 
-const changePassword = async (userId, currentPassword, newPassword) => {
+const changePassword = async (userId, password, newPassword) => {
   return new Promise((resolve, reject) => {
     // First verify current password
     const sql = `SELECT password FROM users WHERE id = ?`
@@ -150,7 +157,7 @@ const changePassword = async (userId, currentPassword, newPassword) => {
       }
 
       const user = data[0]
-      const isPasswordValid = await bcrypt.compare(currentPassword, user.password)
+      const isPasswordValid = await bcrypt.compare(password, user.password)
 
       if (!isPasswordValid) {
         reject(new Error('Current password is incorrect'))

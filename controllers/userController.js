@@ -50,14 +50,12 @@ const getProfile = async (req, res) => {
 
 const updateProfile = async (req, res) => {
     try {
-        // Express lowercases headers, so check both userId and userid
-        
         const userId = req.headers.userid || req.headers.userId
         if (!userId) {
             return res.send(result.createErrorResult('User ID is required in headers'))
         }
-        const { firstName, lastName, phone } = req.body
-        const userData = await userService.updateUserProfile(userId, { firstName, lastName, phone })
+        const { firstName, lastName, email, mobile, dob } = req.body
+        const userData = await userService.updateUserProfile(userId, { firstName, lastName, email, mobile, dob })
         res.send(result.createSuccessResult(userData))
     } catch (error) {
         res.send(result.createErrorResult(error.message))
@@ -66,18 +64,17 @@ const updateProfile = async (req, res) => {
 
 const changePassword = async (req, res) => {
     try {
-        // Express lowercases headers, so check both userId and userid
         const userId = req.headers.userid || req.headers.userId
         if (!userId) {
             return res.send(result.createErrorResult('User ID is required in headers'))
         }
-        const { currentPassword, newPassword } = req.body
+        const { password, newPassword } = req.body
 
-        if (!currentPassword || !newPassword) {
+        if (!password || !newPassword) {
             return res.send(result.createErrorResult('Current password and new password are required'))
         }
 
-        const userData = await userService.changePassword(userId, currentPassword, newPassword)
+        const userData = await userService.changePassword(userId, password, newPassword)
         res.send(result.createSuccessResult(userData))
     } catch (error) {
         res.send(result.createErrorResult(error.message))

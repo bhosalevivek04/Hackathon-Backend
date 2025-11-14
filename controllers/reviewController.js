@@ -3,8 +3,12 @@ const result = require('../utils/result')
 
 const createReview = async (req, res) => {
   try {
-    const userId = req.headers.userId
+    const userId = req.headers.userId || req.headers.userid
     const { movieId, review, rating } = req.body
+
+    if (!userId) {
+      return res.send(result.createErrorResult('User ID is required in headers'))
+    }
 
     if (!movieId || !review || !rating) {
       return res.send(result.createErrorResult('Movie ID, review, and rating are required'))
@@ -29,7 +33,10 @@ const createReview = async (req, res) => {
 
 const getMyReviews = async (req, res) => {
   try {
-    const userId = req.headers.userId
+    const userId = req.headers.userId || req.headers.userid
+    if (!userId) {
+      return res.send(result.createErrorResult('User ID is required in headers'))
+    }
     const reviews = await reviewService.getMyReviews(userId)
     res.send(result.createSuccessResult(reviews))
   } catch (error) {
@@ -48,7 +55,10 @@ const getAllReviews = async (req, res) => {
 
 const getReviewById = async (req, res) => {
   try {
-    const userId = req.headers.userId
+    const userId = req.headers.userId || req.headers.userid
+    if (!userId) {
+      return res.send(result.createErrorResult('User ID is required in headers'))
+    }
     const { id } = req.params
     const review = await reviewService.getReviewById(id, userId)
     res.send(result.createSuccessResult(review))

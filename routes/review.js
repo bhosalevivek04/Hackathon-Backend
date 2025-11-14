@@ -3,11 +3,10 @@ const reviewController = require('../controllers/reviewController')
 
 const router = express.Router()
 
-// Specific routes must come before parameterized routes
 router.post('/', reviewController.createReview)
 router.get('/my', reviewController.getMyReviews)
 router.get('/shared', reviewController.getSharedReviews)
-router.get('/all', reviewController.getAllReviews)
+router.get('/', reviewController.getAllReviews)
 router.get('/users', reviewController.getAllUsersForSharing)
 router.post('/:id/share', reviewController.shareReview)
 router.get('/:id', reviewController.getReviewById)

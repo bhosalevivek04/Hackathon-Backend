@@ -202,7 +202,9 @@ http://localhost:4000
 {
   "firstName": "John",
   "lastName": "Smith",
-  "phone": "+9876543210"
+  "email": "john.smith@example.com",
+  "mobile": "0987654321",
+  "dob": "01/15/1990"
 }
 ```
 

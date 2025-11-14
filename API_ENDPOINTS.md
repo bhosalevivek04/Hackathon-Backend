@@ -85,7 +85,7 @@ userId: 1
   "data": {
     "firstName": "John",
     "lastName": "Doe",
-    "phoneNumber": "1234567890",
+    "mobile": "1234567890",
     "email": "john.doe@example.com"
   }
 }
@@ -105,8 +105,10 @@ userId: 1
 ```json
 {
   "firstName": "John",
-  "lastName": "Smith",
-  "phone": "9876543210"
+  "lastName": "Doe",
+  "email": "john.doe@example.com",
+  "mobile": "1234567890",
+  "dob": "01/15/1990"
 }
 ```
 
@@ -133,7 +135,7 @@ userId: 1
 **Request Body:**
 ```json
 {
-  "currentPassword": "oldpassword123",
+  "password": "password123",
   "newPassword": "newpassword123"
 }
 ```
@@ -179,6 +181,9 @@ userId: 1
 ### 7. Get Movie by ID
 **GET** `/movies/:id`
 
+**Parameters:**
+- `id` (path parameter): The ID of the movie to retrieve
+
 **Response:**
 ```json
 {
@@ -190,6 +195,15 @@ userId: 1
   }
 }
 ```
+
+
+**Postman Usage:**
+- **Method:** GET
+- **URL:** `http://localhost:4000/movies/:id` (replace `:id` with the actual movie ID, e.g., `http://localhost:4000/movies/1`)
+- **Headers:** None required
+- **Body:** None
+- Click **Send** to execute the request.
+- **Expected Response:** JSON response as shown above for success, or error if the movie ID does not exist.
 
 ---
 
@@ -255,7 +269,7 @@ userId: 1
 ---
 
 ### 10. Get All Reviews
-**GET** `/reviews/all`
+**GET** `/reviews`
 
 **Response:**
 ```json

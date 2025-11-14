@@ -2,7 +2,7 @@ const pool = require('../db/db')
 
 const getAllMovies = async () => {
   return new Promise((resolve, reject) => {
-    const sql = `SELECT id, title, release as releaseDate FROM movies ORDER BY release DESC`
+    const sql = `SELECT id, title, \`release\` FROM movies ORDER BY \`release\` DESC`
     pool.query(sql, (error, data) => {
       if (error) {
         reject(new Error('Database error: ' + error.message))
@@ -15,7 +15,7 @@ const getAllMovies = async () => {
 
 const getMovieById = async (movieId) => {
   return new Promise((resolve, reject) => {
-    const sql = `SELECT id, title, release as releaseDate FROM movies WHERE id = ?`
+    const sql = `SELECT id, title, \`release\` FROM movies WHERE id = ?`
     pool.query(sql, [movieId], (error, data) => {
       if (error) {
         reject(new Error('Database error: ' + error.message))
