@@ -57,10 +57,9 @@ http://localhost:4000
   "firstName": "John",
   "lastName": "Doe",
   "email": "john.doe@example.com",
-  "mobileNumber": "+1234567890",
-  "dateOfBirth": "01/15/1990",
-  "password": "password123",
-  "confirmPassword": "password123"
+  "mobile": "1234567890",
+  "dob": "01/15/1990",
+  "password": "password123"
 }
 ```
 
@@ -87,7 +86,6 @@ http://localhost:4000
 
 **Other Possible Errors:**
 - `"All fields are required"` - Missing required fields
-- `"Passwords do not match"` - Password and confirmPassword don't match
 
 ---
 
@@ -254,17 +252,19 @@ http://localhost:4000
    ```
 2. Click **Send** to see error response
 
-### Test Register with Password Mismatch
+### Test Register with Missing Fields
 
-1. In the Signup request, make passwords different:
+1. In the Signup request, remove a required field (e.g., `mobile`):
    ```json
    {
-     ...
-     "password": "password123",
-     "confirmPassword": "differentpassword"
+     "firstName": "John",
+     "lastName": "Doe",
+     "email": "john.doe@example.com",
+     "dob": "01/15/1990",
+     "password": "password123"
    }
    ```
-2. Click **Send** to see validation error
+2. Click **Send** to see "All fields are required" error
 
 ### Test Profile Endpoints with Invalid User ID
 
@@ -330,10 +330,9 @@ Content-Type: application/json
   "firstName": "John",
   "lastName": "Doe",
   "email": "john.doe@example.com",
-  "mobileNumber": "+1234567890",
-  "dateOfBirth": "01/15/1990",
-  "password": "password123",
-  "confirmPassword": "password123"
+  "mobile": "1234567890",
+  "dob": "01/15/1990",
+  "password": "password123"
 }
 ```
 
@@ -376,7 +375,8 @@ userId: 1
 - Always ensure the server is running before testing
 - Use different email addresses for testing multiple user registrations
 - Save the token from login response for authenticated API calls
-- The `dateOfBirth` format should be `MM/DD/YYYY` (e.g., `01/15/1990`)
+- The `dob` (date of birth) format should be `MM/DD/YYYY` (e.g., `01/15/1990`)
+- The `mobile` field accepts phone numbers without country code prefix (e.g., `1234567890`)
 - Profile endpoints require `userId` in headers (current implementation)
 - All responses return HTTP 200, but check the `status` field in the JSON response body
 

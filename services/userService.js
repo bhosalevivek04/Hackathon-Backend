@@ -5,7 +5,7 @@ const config = require('../utils/config')
 
 const createUser = async (userData) => {
   return new Promise((resolve, reject) => {
-    const { firstName, lastName, email, mobileNumber, dateOfBirth, password } = userData
+    const { firstName, lastName, email, mobile, dob, password } = userData
 
     const checkEmailSql = `SELECT id FROM users WHERE email = ?`
     pool.query(checkEmailSql, [email], async (error, existingUsers) => {
@@ -22,16 +22,16 @@ const createUser = async (userData) => {
       const saltRounds = 10
       const hashedPassword = await bcrypt.hash(password, saltRounds)
 
-      let formattedDateOfBirth = dateOfBirth
-      if (dateOfBirth.includes('/')) {
-        const [month, day, year] = dateOfBirth.split('/')
+      let formattedDateOfBirth = dob
+      if (dob && dob.includes('/')) {
+        const [month, day, year] = dob.split('/')
         formattedDateOfBirth = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
       }
 
       const insertSql = `INSERT INTO users (first_name, last_name, email, password, mobile, birth) VALUES (?, ?, ?, ?, ?, ?)`
       pool.query(
         insertSql,
-        [firstName, lastName, email, hashedPassword, mobileNumber, formattedDateOfBirth],
+        [firstName, lastName, email, hashedPassword, mobile, formattedDateOfBirth],
         (error, data) => {
           if (error) {
             reject(new Error('Registration failed: ' + error.message))
@@ -128,10 +128,53 @@ const updateUserProfile = async (userId, userData) => {
   })
 }
 
+const changePassword = async (userId, currentPassword, newPassword) => {
+  return new Promise((resolve, reject) => {
+    // First verify current password
+    const sql = `SELECT password FROM users WHERE id = ?`
+    pool.query(sql, [userId], async (error, data) => {
+      if (error) {
+        reject(new Error('Database error: ' + error.message))
+        return
+      }
+
+      if (!data || data.length === 0) {
+        reject(new Error('User not found'))
+        return
+      }
+
+      const user = data[0]
+      const isPasswordValid = await bcrypt.compare(currentPassword, user.password)
+
+      if (!isPasswordValid) {
+        reject(new Error('Current password is incorrect'))
+        return
+      }
+
+      // Hash new password
+      const saltRounds = 10
+      const hashedPassword = await bcrypt.hash(newPassword, saltRounds)
+
+      // Update password
+      const updateSql = `UPDATE users SET password = ? WHERE id = ?`
+      pool.query(updateSql, [hashedPassword, userId], (error, data) => {
+        if (error) {
+          reject(new Error('Failed to change password: ' + error.message))
+          return
+        }
+        resolve({
+          message: 'Password changed successfully'
+        })
+      })
+    })
+  })
+}
+
 module.exports = {
   createUser,
   loginUser,
   getUserProfile,
-  updateUserProfile
+  updateUserProfile,
+  changePassword
 }
 
