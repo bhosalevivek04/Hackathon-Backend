@@ -3,22 +3,18 @@ const result = require('../utils/result')
 
 const register = async (req, res) => {
     try {
-        const { firstName, lastName, email, mobileNumber, dateOfBirth, password, confirmPassword } = req.body
+        const { firstName, lastName, email, mobile, dob, password} = req.body
 
-        if (!firstName || !lastName || !email || !mobileNumber || !dateOfBirth || !password || !confirmPassword) {
+        if (!firstName || !lastName || !email || !mobile || !dob || !password ) {
             return res.send(result.createErrorResult('All fields are required'))
-        }
-
-        if (password !== confirmPassword) {
-            return res.send(result.createErrorResult('Passwords do not match'))
         }
 
         const userData = await userService.createUser({
             firstName,
             lastName,
             email,
-            mobileNumber,
-            dateOfBirth,
+            mobile,
+            dob,
             password
         })
 
