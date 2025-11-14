@@ -46,6 +46,10 @@ const getMyReviews = async (req, res) => {
 
 const getAllReviews = async (req, res) => {
   try {
+    const userId = req.headers.userId || req.headers.userid
+    if (!userId) {
+      return res.send(result.createErrorResult('User ID is required in headers'))
+    }
     const reviews = await reviewService.getAllReviews()
     res.send(result.createSuccessResult(reviews))
   } catch (error) {
