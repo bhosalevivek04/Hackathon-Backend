@@ -36,8 +36,7 @@ const login = async (req, res) => {
 
 const getProfile = async (req, res) => {
     try {
-        // Express lowercases headers, so check both userId and userid
-        const userId = req.headers.userid || req.headers.userId
+        const userId = req.headers.userId || req.headers.userid
         if (!userId) {
             return res.send(result.createErrorResult('User ID is required in headers'))
         }
@@ -50,7 +49,7 @@ const getProfile = async (req, res) => {
 
 const updateProfile = async (req, res) => {
     try {
-        const userId = req.headers.userid || req.headers.userId
+        const userId = req.headers.userId || req.headers.userid
         if (!userId) {
             return res.send(result.createErrorResult('User ID is required in headers'))
         }
@@ -64,7 +63,7 @@ const updateProfile = async (req, res) => {
 
 const changePassword = async (req, res) => {
     try {
-        const userId = req.headers.userid || req.headers.userId
+        const userId = req.headers.userId || req.headers.userid
         if (!userId) {
             return res.send(result.createErrorResult('User ID is required in headers'))
         }

@@ -1,15 +1,7 @@
 -- Movie Review Application Database Schema
--- MySQL Database Setup Script
 
--- Create database (uncomment if needed)
 CREATE DATABASE IF NOT EXISTS movie_review_db;
 USE movie_review_db;
-
--- Drop tables if they exist (in reverse order of dependencies)
-DROP TABLE IF EXISTS shares;
-DROP TABLE IF EXISTS reviews;
-DROP TABLE IF EXISTS movies;
-DROP TABLE IF EXISTS users;
 
 -- Create users table
 CREATE TABLE users (
@@ -39,7 +31,6 @@ CREATE TABLE reviews (
     movie_id INT NOT NULL,
     user_id INT NOT NULL,
     review TEXT NOT NULL,
-    rating INT NOT NULL CHECK (rating >= 1 AND rating <= 5),
     modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (movie_id) REFERENCES movies(id) ON DELETE CASCADE,
@@ -61,7 +52,6 @@ CREATE TABLE shares (
     INDEX idx_review_id (review_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Pre-populate with 10 fixed movies
 INSERT INTO movies (title, `release`) VALUES
 ('The Shawshank Redemption', '1994-09-23'),
 ('The Godfather', '1972-03-24'),
@@ -73,8 +63,4 @@ INSERT INTO movies (title, `release`) VALUES
 ('The Matrix', '1999-03-31'),
 ('Goodfellas', '1990-09-21'),
 ('Interstellar', '2014-11-07');
-
--- Display confirmation
-SELECT 'Database schema created successfully!' AS message;
-SELECT COUNT(*) AS total_movies FROM movies;
 

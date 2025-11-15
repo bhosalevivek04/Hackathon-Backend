@@ -8,9 +8,9 @@ http://localhost:4000
 ```
 
 ## Authentication
-All authenticated endpoints require `userId` in the request headers (case-insensitive, accepts both `userId` and `userid`):
+All authenticated endpoints require `userId` in the request headers:
 ```
-userId: <user_id>
+userId: <user_Id>
 ```
 
 ---
@@ -61,7 +61,7 @@ userId: <user_id>
 {
   "status": "success",
   "data": {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "token": "token",
     "firstName": "John",
     "lastName": "Doe"
   }
@@ -449,47 +449,8 @@ userId: 1
 }
 ```
 
----
-
-## Error Responses
-
-All endpoints return errors in the following format:
-
-```json
-{
-  "status": "error",
-  "error": "Error message here"
-}
-```
-
-## Common Error Messages
-
-- `"All fields are required"` - Missing required fields
-- `"Email already exists"` - Email is already registered
-- `"Invalid email or password"` - Login credentials are incorrect
-- `"User not found"` - User ID doesn't exist
-- `"Movie not found"` - Movie ID doesn't exist
-- `"Review not found"` - Review ID doesn't exist
-- `"You have already reviewed this movie"` - User already created a review for this movie
-- `"You do not have permission to access this review"` - User doesn't own the review
-- `"Current password is incorrect"` - Wrong current password when changing password
-- `"Rating must be between 1 and 10"` - Invalid rating value
-
----
-
 ## Notes
 
-1. **Rating System**: The API accepts ratings from 1-10, but the database stores them as 1-5. The conversion is handled automatically.
+1. **Authentication**: Currently uses `userId` header. In production, this should be replaced with JWT token authentication.
 
-2. **Authentication**: Currently uses `userId` header (case-insensitive, accepts both `userId` and `userid`). In production, this should be replaced with JWT token authentication.
-
-3. **Date Format**:
-   - Date of birth: `MM/DD/YYYY` (e.g., `01/15/1990`)
-   - Release dates: `YYYY-MM-DD` (e.g., `1994-09-23`)
-
-4. **Sharing**: When a review is deleted, all shares are automatically removed (CASCADE).
-
-5. **One Review Per Movie**: Each user can only create one review per movie.
-
-6. **Header Case Sensitivity**: All authenticated endpoints accept both `userId` and `userid` headers for flexibility.
-
+2. **Sharing**: When a review is deleted, all shares are automatically removed (CASCADE).

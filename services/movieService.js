@@ -1,33 +1,26 @@
 const pool = require('../db/db')
 
 const getAllMovies = async () => {
-  return new Promise((resolve, reject) => {
-    const sql = `SELECT id, title, \`release\` FROM movies ORDER BY \`release\` DESC`
-    pool.query(sql, (error, data) => {
-      if (error) {
-        reject(new Error('Database error: ' + error.message))
-        return
-      }
-      resolve(data)
-    })
-  })
+  const sql = `SELECT id, title, \`release\` FROM movies ORDER BY \`release\` DESC`
+  try {
+    const [data] = await pool.query(sql)
+    return data
+  } catch (error) {
+    throw new Error('Database error: ' + error.message)
+  }
 }
 
 const getMovieById = async (movieId) => {
-  return new Promise((resolve, reject) => {
+  try {
     const sql = `SELECT id, title, \`release\` FROM movies WHERE id = ?`
-    pool.query(sql, [movieId], (error, data) => {
-      if (error) {
-        reject(new Error('Database error: ' + error.message))
-        return
-      }
-      if (!data || data.length === 0) {
-        reject(new Error('Movie not found'))
-        return
-      }
-      resolve(data[0])
-    })
-  })
+    const [data] = await pool.query(sql, [movieId])
+    if (!data || data.length === 0) {
+      throw new Error('Movie not found')
+    }
+    return data[0]
+  } catch (error) {
+    throw new Error('Database error: ' + error.message)
+  }
 }
 
 module.exports = {
